@@ -1,20 +1,21 @@
-checkers: ai.o board.o checkers.o hash.o
-	g++ -O3 ai.o board.o checkers.o hash.o -o checkers
-	
-ai.o: ai.cpp ai.h board.h hash.h
-	g++ -O3 -c ai.cpp
-	
-board.o: board.cpp board.h
-	g++ -O3 -c board.cpp
+CC := g++
+CFLAGS := -O3
+SRCDIR := src
+BUILDDIR := build
+TARGETDIR := bin
+SOURCES := $(shell find $(SRCDIR) -type f -name *.cpp)
+OBJECTS := $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES:.cpp=.o))
 
-checkers.o: checkers.cpp ai.h board.h
-	g++ -O3 -c checkers.cpp
+$(TARGETDIR)/checkers: $(OBJECTS)
+	@mkdir -p $(TARGETDIR)
+	g++ -O3 $(BUILDDIR)/ai.o $(BUILDDIR)/board.o $(BUILDDIR)/checkers.o $(BUILDDIR)/hash.o -o $(TARGETDIR)/checkers
 
-hash.o: hash.cpp hash.h
-	g++ -O3 -c hash.cpp
+$(BUILDDIR)/%.o: $(SRCDIR)/%.cpp
+	@mkdir -p $(BUILDDIR)
+	@echo " $(CC) $(CFLAGS) -c -o $@ $<"; $(CC) $(CFLAGS) -c -o $@ $<
 
 debug:
-	g++ -g checkers.cpp ai.cpp board.cpp hash.cpp -o checkersDebug
-	
-clean: 
-	rm *.o *.exe
+	g++ -g $(SRCDIR)/checkers.cpp $(SRCDIR)/ai.cpp $(SRCDIR)/board.cpp $(SRCDIR)/hash.cpp -o $(BUILDDIR)/checkersDebug
+
+clean:
+	rm $(SRCDIR)/*.o $(SRCDIR)/*.exe
