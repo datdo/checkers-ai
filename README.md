@@ -1,11 +1,11 @@
-#Checkers with simple minimax AI
+# Checkers with simple minimax AI
 
 ## Requirements
 * make
 * gcc (g++)
 
 
-##Installation
+## Installation
 This project uses make to build to application. Once built, the executable will be in the bin folder as checkers.
 
 
